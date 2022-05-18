@@ -6,22 +6,26 @@ export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Post()
-  addProduct(
+  async addProduct(
     @Body() body: { title: string; description: string; price: number },
   ) {
     const { title, description, price } = body;
-    const id = this.productsService.createProduct(title, description, price);
+    const product = await this.productsService.createProduct(
+      title,
+      description,
+      price,
+    );
 
     return {
       status: 'success',
-      data: id,
+      data: product,
       message: 'Product added successfully!',
     };
   }
 
   @Get()
-  getProducts() {
-    const products = this.productsService.fetchProducts();
+  async getProducts() {
+    const products = await this.productsService.fetchProducts();
     return { status: 'success', data: products };
   }
 
